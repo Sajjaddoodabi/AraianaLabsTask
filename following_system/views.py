@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from rest_framework.exceptions import AuthenticationFailed
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -22,7 +22,9 @@ class FollowView(APIView):
             return Response(response)
 
         if following_user not in user.followings.all():
+            following_user.followers.add(user)
             user.followings.add(following_user)
+            following_user.save()
             user.save()
         else:
             response = {'detail': f'already followed {following_user}'}
@@ -45,7 +47,9 @@ class UnFollowView(APIView):
             return Response(response)
 
         if unfollowing_user in user.followings.all():
+            unfollowing_user.followers.remove(user)
             user.followings.remove(unfollowing_user)
+            unfollowing_user.save()
             user.save()
         else:
             response = {'detail': f'you do not follow {unfollowing_user}'}
@@ -55,11 +59,24 @@ class UnFollowView(APIView):
         return Response(response)
 
 
-class FollowingsListView(ListAPIView):
+class FollowingsListView(RetrieveAPIView):
     serializer_class = UserFollowingsSerializer
-    queryset = User.objects.all
+    queryset = User.objects.all()
+
+    def get_object(self):
+        user = self.request.user
+        if user.is_anonymous:
+            raise AuthenticationFailed('unauthenticated!')
+        return user
 
 
-class FollowersListView(ListAPIView):
+class FollowersListView(RetrieveAPIView):
     serializer_class = UserFollowersSerializer
-    queryset = User.objects.all
+    queryset = User.objects.all()
+
+    def get_object(self):
+        user = self.request.user
+        if user.is_anonymous:
+            raise AuthenticationFailed('unauthenticated!')
+        return user
+

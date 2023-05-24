@@ -97,16 +97,22 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
 
 class UserFollowingsSerializer(serializers.ModelSerializer):
-    # followings = UserSerializer(read_only=True, many=True)
+    followings = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = ('id', 'username', 'followings')
 
+    def get_followings(self, obj):
+        return [user.username for user in obj.followings.all()]
+
 
 class UserFollowersSerializer(serializers.ModelSerializer):
-    # followers = UserSerializer(source='followers.username', many=True)
+    followers = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = ('id', 'username', 'followers')
+
+    def get_followers(self, obj):
+        return [user.username for user in obj.followings.all()]
