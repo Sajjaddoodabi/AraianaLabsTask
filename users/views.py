@@ -1,4 +1,4 @@
-from rest_framework.generics import CreateAPIView, RetrieveAPIView, RetrieveUpdateAPIView, UpdateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView
 from .serializers import UserRegisterSerializer, UserSerializer, ChangePasswordSerializer
 from .models import User
 
@@ -8,7 +8,12 @@ class UserRegisterView(CreateAPIView):
     queryset = User
 
 
-class UserRetrieveAndUpdateView(RetrieveUpdateAPIView):
+class UserRetrieveView(RetrieveAPIView):
+    serializer_class = UserSerializer
+    queryset = User
+
+
+class UserUpdateView(UpdateAPIView):
     serializer_class = UserSerializer
     queryset = User
 
