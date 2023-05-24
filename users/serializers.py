@@ -94,3 +94,19 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('password and confirm password does NOT match!')
 
         return attrs
+
+
+class UserFollowingsSerializer(serializers.ModelSerializer):
+    # followings = UserSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'followings')
+
+
+class UserFollowersSerializer(serializers.ModelSerializer):
+    # followers = UserSerializer(source='followers.username', many=True)
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'followers')

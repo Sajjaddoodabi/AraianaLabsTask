@@ -15,6 +15,10 @@ class User(AbstractUser):
     )
     description = models.CharField(max_length=500, blank=True, null=True)
 
+    followings = models.ManyToManyField('self', blank=True, related_name='user_followings', symmetrical=False)
+    followers = models.ManyToManyField('self', blank=True, related_name='user_followers', symmetrical=False)
+
     def __str__(self):
         return self.username
+
 
