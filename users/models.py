@@ -7,6 +7,7 @@ def get_profile_image(self, file_name):
 
 
 class User(AbstractUser):
+    email = models.EmailField(unique=True)
     profile_image = models.ImageField(
         upload_to=get_profile_image,
         max_length=255,
