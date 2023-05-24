@@ -13,7 +13,7 @@ class User(AbstractUser):
         max_length=255,
         default='images/profile_images/Default.png'
     )
-    description = models.CharField(max_length=500)
+    description = models.CharField(max_length=500, blank=True, null=True)
 
     def __str__(self):
         return self.username

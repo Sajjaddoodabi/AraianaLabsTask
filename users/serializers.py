@@ -4,6 +4,13 @@ from rest_framework import serializers
 from users.models import User
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ('id', 'username', 'email', 'first_name', 'last_name', 'profile_image', 'description', 'is_active',
+                 'date_joined')
+        read_only_fields = ('id', 'is_active', 'date_joined')
+
+
 class UserRegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True,
@@ -31,7 +38,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
         # checking if password and confirm password are the same
         if attrs.get('password') != attrs.get('confirm_password'):
-            raise serializers.ValidationError(_('password and confirm password does NOT match!'))
+            raise serializers.ValidationError('password and confirm password does NOT match!')
 
         return attrs
 
