@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/accounts/', include('users.urls')),
     path('api/following_system/', include('following_system.urls')),
+    path('api/tweets/', include('tweets.urls')),
 ]
