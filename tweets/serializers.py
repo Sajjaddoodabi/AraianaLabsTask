@@ -5,13 +5,13 @@ from .models import Tweet
 
 
 class TweetSerializer(serializers.ModelSerializer):
-    # retweets_count = serializers.SerializerMethodField()
-    # user = UserSerializer(read_only=True)
+    retweets_count = serializers.SerializerMethodField()
+    user = serializers.CharField(source='user.username', read_only=True)
 
     class Meta:
         model = Tweet
-        fields = '__all__'
-        read_only_fields = ('id', 'created_at', 'edited_at')
+        fields = ('id', 'user', 'parent', 'content', 'created_at', 'edited_at', 'retweets_count')
+        read_only_fields = ('id', 'created_at', 'edited_at', 'user')
         extra_kwargs = {
             'content': {
                 'error_messages': {
@@ -20,7 +20,8 @@ class TweetSerializer(serializers.ModelSerializer):
             }
         }
 
-    # def get_retweet_count(self):
-    #     return self.retweets.count()
+    @staticmethod
+    def get_retweets_count(self):
+        return self.retweets.count()
 
 
