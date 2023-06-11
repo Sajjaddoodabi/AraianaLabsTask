@@ -12,8 +12,12 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 
+from elasticsearch import Elasticsearch
+from elasticsearch_dsl.connections import connections
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-import AraianaLabsTask.settings
+
+from AraianaLabsTask.local_settings import settings
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -200,3 +204,18 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = 'media'
 
 AUTH_USER_MODEL = 'users.User'
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'localhost:9200',
+    },
+}
+
+connections.create_connection(
+    hosts=settings["elk"]["hosts"],
+    http_auth=(settings["elk"]["http_auth_username"], settings["elk"]["http_auth_password"]),
+    scheme=settings["elk"]["scheme"],
+    port=settings["elk"]["port"],
+    use_ssl=settings["elk"]["use_ssl"],
+    verify_certs=settings["elk"]["verify_certs"],
+)
